@@ -5,7 +5,7 @@ class Baozi extends ComicSource {
   // 唯一标识符
   key = "baozi";
 
-  version = "1.1.6";
+  version = "1.1.7";
 
   minAppVersion = "1.0.0";
 
@@ -26,14 +26,14 @@ class Baozi extends ComicSource {
       title: "主域名",
       type: "select",
       options: [
-        { value: "bzmgcn.com" },
-        { value: "baozimhcn.com" },
         { value: "webmota.com" },
         { value: "kukuc.co" },
         { value: "twmanga.com" },
         { value: "dinnerku.com" },
+        { value: "bzmgcn.com" },
+        { value: "baozimhcn.com" },
       ],
-      default: "bzmgcn.com",
+      default: "webmota.com",
     },
     cdn_domains: {
       title: "图片资源站域名",
