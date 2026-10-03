@@ -1,1 +1,15 @@
-[{"name":"示例漫画源","fileName":"example.js","key":"example","version":"0.1.0","description":"模板源：请替换为真实站点解析逻辑"}]
+[
+  {
+    "name": "包子漫画",
+    "fileName": "baozi.js",
+    "key": "baozi",
+    "version": "1.1.6"
+  },
+  {
+    "name": "禁漫天堂",
+    "fileName": "jm.js",
+    "key": "jm",
+    "version": "1.4.0",
+    "description": "禁漫天堂漫畫源, 不能使用時請嘗試切換分流"
+  }
+]

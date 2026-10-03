@@ -13,3 +13,24 @@ Venera 漫画源仓库模板，包含 `index.json`、JS 源、取证/生成/检�
 `python3 tools/venera_source.py inspect example.js`
 
 search 会把实际抓到的首页、搜索页和报告保存到 evidence/；scaffold 只生成待验证模板，不猜测解析器。
+
+## 已收录漫画源
+
+| 名称 | key | 文件 | 版本 |
+|---|---|---|---|
+| 包子漫画 | baozi | baozi.js | 1.1.6 |
+| 禁漫天堂 | jm | jm.js | 1.4.0 |
+
+来源：`venera-app/venera-configs`（上游 commit d8a71168，2026-09-07）。此处为镜像收录并同步上游修复；每个源的 `url` 已指向本仓库，便于自更新。
+
+`templates/example.js` 为空模板，不参与 `index.json`，仅作新建源时参考。
+
+## 更新已有源
+
+```bash
+git clone --depth 1 https://github.com/venera-app/venera-configs.git /tmp/upstream
+cp /tmp/upstream/baozi.js ./baozi.js
+python3 tools/check.py
+```
+
+同步上游后需把源文件里的 `url` 改回本仓库地址，并同步 `index.json` 的 `version`。
