@@ -1,0 +1,38 @@
+name: Purge jsDelivr CDN
+on:
+  push:
+    branches: [main]
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Collect changed js/json
+        id: changed
+        run: |
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.sha }}"
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            if git rev-parse --verify HEAD^ >/dev/null 2>&1; then
+              DIFF="git diff --name-only HEAD^ HEAD"
+            else
+              DIFF="git ls-tree -r HEAD --name-only"
+            fi
+          else
+            DIFF="git diff --name-only $BEFORE $AFTER"
+          fi
+          FILES=$($DIFF | grep -E '\.(js|json)$' | tr '\n' ' ')
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+          echo "changed: $FILES"
+      - name: Purge
+        if: steps.changed.outputs.files != ''
+        run: |
+          for f in ${{ steps.changed.outputs.files }}; do
+            [ -n "$f" ] || continue
+            U="https://purge.jsdelivr.net/gh/${GITHUB_REPOSITORY}@main/${f}"
+            C=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$U")
+            echo "purge $f -> HTTP $C"
+            sleep 0.5
+          done

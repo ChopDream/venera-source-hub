@@ -44,3 +44,21 @@ python3 tools/check.py
 | 包子漫画 | 1.1.6 → 1.1.7 | 默认域名 `bzmgcn.com`、`baozimhcn.com` 均 302 跳转到 `www.baozimh.com` 后返回 403，搜索/分类全失败 | 默认域名改为 `webmota.com`，并把可用域名排在前面（`webmota.com` / `kukuc.co` / `twmanga.com` / `dinnerku.com`，实测搜索 200 且 `div.comics-card` 命中 142 处） |
 | 禁漫天堂 | 1.4.0 → 1.4.1 | 内置备用线路 4 个全部失效（`cdnsha.org` / `cdnaspa.cc` / `cdnntr.cc` DNS 解析失败，`cdntwice.org` 返回 404）；若在线线路列表拉取失败则完全不可用 | 备用线路更新为当前在线列表 `www.cdnhjk.net` / `www.cdngwc.cc` / `www.cdngwc.net` / `www.cdngwc.club`（实测搜索接口 200，解密成功，total=710） |
 | 禁漫天堂 | 1.4.1 | `JM.apiDomains` 无初始值，关闭“启动时刷新域名”后 `baseUrl` 为 undefined | 增加 `static apiDomains` 初值，与备用线路一致 |
+
+### CDN 缓存说明
+
+jsDelivr 对 `@main` 分支内容最长缓存 12 小时，因此仓库内置了 `.github/workflows/purge-cdn.yml`，每次 push 自动 purge 变更的 `.js`/`.json`。
+
+实测：`index.json`、`baozi.js` purge 后立即生效；`jm.js` 在 purge 返回 `status: finished` 后仍持续返回旧内容（38352 字节，版本 1.4.0），而 `raw.githubusercontent.com` 已同步为新内容。
+
+因此推荐优先使用 GitHub 原生地址（约 5 分钟缓存）：
+
+```text
+https://raw.githubusercontent.com/ChopDream/venera-source-hub/main/index.json
+```
+
+jsDelivr 地址作为备用：
+
+```text
+https://cdn.jsdelivr.net/gh/ChopDream/venera-source-hub@main/index.json
+```

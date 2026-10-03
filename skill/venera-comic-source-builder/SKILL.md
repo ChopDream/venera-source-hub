@@ -1,11 +1,9 @@
 ---
-name: venera-source-builder
-description: Create, repair, validate, and maintain Venera comic-source repositories from real website evidence. Use for Venera repository URLs, new comic sources, broken-source fixes, website-to-source conversion, source indexing, or scheduled validation.
+name: venera-comic-source-builder
+description: 根据网站真实证据制作、修复、校验和维护 Venera 漫画源仓库。Use when the user mentions Venera 仓库地址、漫画源、制作漫画源、修复失效漫画源、漫画网站转源、源索引或定时校验.
 ---
 
-# Venera Source Builder
-
-Route: `practice_distill` → `Practice skill` → `BEST_OF`.
+# Venera Comic Source Builder
 
 ## Operating card
 
@@ -29,7 +27,7 @@ Fetch homepage and a real search request for a user keyword. Trace `search resul
 
 Classify each stage as HTML, JSON API, mixed, dynamic/blocked, login-required, or site-side unavailable. Search and chapter loading can use different mechanisms.
 
-## SMIB rule extraction
+## 规则提取（状态 → 机制 → 证据 → 边界）
 
 For each parser decision write:
 
