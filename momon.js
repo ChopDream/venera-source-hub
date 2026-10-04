@@ -3,7 +3,7 @@ class MomonGA extends ComicSource {
 
   key = "momon_ga";
 
-  version = "1.0.0";
+  version = "1.0.1";
 
   minAppVersion = "1.5.0";
 
@@ -64,32 +64,36 @@ class MomonGA extends ComicSource {
     return new HtmlDocument(html).querySelector("a.nextpostslink") !== null;
   }
 
+  listUrl(path, page) {
+    const base = path === "latest" ? this.baseUrl : `${this.baseUrl}/${path}`;
+    if (page === 1) return base;
+    const b = base.endsWith("/") ? base.slice(0, -1) : base;
+    return `${b}/page/${page}/`;
+  }
+
   explore = [
     {
-      title: "最新",
-      type: "multiPageComicList",
-      load: async (page) => {
-        const res = await Network.get(this.loadPage(this.baseUrl, page), {});
-        if (res.status !== 200) throw "状态码错误：" + res.status;
-        return { comics: this.parseList(res.body), maxPage: this.hasNext(res.body) ? page + 1 : page };
-      },
-    },
-    {
-      title: "同人誌",
-      type: "multiPageComicList",
-      load: async (page) => {
-        const res = await Network.get(this.loadPage(this.baseUrl + "/fanzine", page), {});
-        if (res.status !== 200) throw "状态码错误：" + res.status;
-        return { comics: this.parseList(res.body), maxPage: this.hasNext(res.body) ? page + 1 : page };
-      },
-    },
-    {
-      title: "商業誌",
-      type: "multiPageComicList",
-      load: async (page) => {
-        const res = await Network.get(this.loadPage(this.baseUrl + "/magazine", page), {});
-        if (res.status !== 200) throw "状态码错误：" + res.status;
-        return { comics: this.parseList(res.body), maxPage: this.hasNext(res.body) ? page + 1 : page };
+      title: "momon:GA",
+      type: "multiPartPage",
+      load: async () => {
+        const sections = [
+          { title: "最新", path: "latest" },
+          { title: "同人誌", path: "fanzine" },
+          { title: "商業誌", path: "magazine" },
+        ];
+        const out = [];
+        for (let s of sections) {
+          const res = await Network.get(this.listUrl(s.path, 1), {});
+          if (res.status !== 200) continue;
+          const comics = this.parseList(res.body).slice(0, 30);
+          if (comics.length === 0) continue;
+          out.push({
+            title: s.title,
+            comics: comics,
+            viewMore: { page: "category", attributes: { category: s.title, param: s.path } },
+          });
+        }
+        return out;
       },
     },
   ];
@@ -175,6 +179,33 @@ class MomonGA extends ComicSource {
       return { images: list.map((x) => x.url) };
     },
   };
+
+  category = {
+    title: "momon:GA",
+    parts: [
+      {
+        name: "分類",
+        type: "fixed",
+        categories: ["最新", "同人誌", "商業誌"],
+        itemType: "category",
+        categoryParams: ["latest", "fanzine", "magazine"],
+      },
+    ],
+    enableRankingPage: false,
+  };
+
+  categoryComics = {
+    load: async (category, param, options, page) => {
+      const path = param || "latest";
+      const res = await Network.get(this.listUrl(path, page), {});
+      if (res.status !== 200) throw "状态码错误：" + res.status;
+      return {
+        comics: this.parseList(res.body),
+        maxPage: this.hasNext(res.body) ? page + 1 : page,
+      };
+    },
+  };
 }
 
 new MomonGA();
+

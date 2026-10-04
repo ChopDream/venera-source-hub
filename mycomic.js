@@ -177,7 +177,7 @@ class MyComic extends ComicSource {
 
     key = "mycomic";
 
-    version = "1.1.0";
+    version = "1.1.1";
 
     minAppVersion = "1.4.6";
 
@@ -266,45 +266,30 @@ class MyComic extends ComicSource {
 
     explore = [
         {
-            title: "最新上架",
-            type: "multiPageComicList",
-            load: async (page) => {
-                if (!page) page = 1;
-                const url = buildComicsUrl(page, "-id");
-                const resp = await fetchWithCFCheck(url);
-                if (resp.status !== 200) throw "HTTP " + resp.status;
-                const doc = new HtmlDocument(resp.body);
-                const comics = parseComicList(doc);
-                const maxPage = parseMaxPage(resp.body);
-                return { comics, maxPage };
-            },
-        },
-        {
-            title: "最近更新",
-            type: "multiPageComicList",
-            load: async (page) => {
-                if (!page) page = 1;
-                const url = buildComicsUrl(page, "-update");
-                const resp = await fetchWithCFCheck(url);
-                if (resp.status !== 200) throw "HTTP " + resp.status;
-                const doc = new HtmlDocument(resp.body);
-                const comics = parseComicList(doc);
-                const maxPage = parseMaxPage(resp.body);
-                return { comics, maxPage };
-            },
-        },
-        {
-            title: "最高人气",
-            type: "multiPageComicList",
-            load: async (page) => {
-                if (!page) page = 1;
-                const url = buildComicsUrl(page, "-views");
-                const resp = await fetchWithCFCheck(url);
-                if (resp.status !== 200) throw "HTTP " + resp.status;
-                const doc = new HtmlDocument(resp.body);
-                const comics = parseComicList(doc);
-                const maxPage = parseMaxPage(resp.body);
-                return { comics, maxPage };
+            title: "MYCOMIC",
+            type: "multiPartPage",
+            load: async () => {
+                const sections = [
+                    { title: "最新上架", sort: "-id" },
+                    { title: "最近更新", sort: "-update" },
+                    { title: "最高人气", sort: "-views" },
+                ];
+                const out = [];
+                for (let s of sections) {
+                    const resp = await fetchWithCFCheck(buildComicsUrl(1, s.sort));
+                    if (resp.status !== 200) continue;
+                    const comics = parseComicList(new HtmlDocument(resp.body)).slice(0, 30);
+                    if (comics.length === 0) continue;
+                    out.push({
+                        title: s.title,
+                        comics: comics,
+                        viewMore: {
+                            page: "category",
+                            attributes: { category: s.title, param: "sort:" + s.sort },
+                        },
+                    });
+                }
+                return out;
             },
         },
     ];
@@ -385,6 +370,13 @@ class MyComic extends ComicSource {
                 itemType: "category",
                 categoryParams: ["end:0", "end:1"],
             },
+            {
+                name: "榜单",
+                type: "fixed",
+                categories: ["最新上架", "最近更新", "最高人气"],
+                itemType: "category",
+                categoryParams: ["sort:-id", "sort:-update", "sort:-views"],
+            },
         ],
         enableRankingPage: true,
     };
@@ -403,8 +395,12 @@ class MyComic extends ComicSource {
             if (param) {
                 const parts = param.split(":");
                 if (parts.length >= 2) {
-                    filterType = parts[0];
-                    filterValue = parts.slice(1).join(":");
+                    if (parts[0] === "sort") {
+                        sort = parts.slice(1).join(":");
+                    } else {
+                        filterType = parts[0];
+                        filterValue = parts.slice(1).join(":");
+                    }
                 }
             }
 

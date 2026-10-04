@@ -22,7 +22,7 @@
     "name": "MYCOMIC",
     "fileName": "mycomic.js",
     "key": "mycomic",
-    "version": "1.1.0"
+    "version": "1.1.1"
   },
   {
     "name": "紳士漫畫",
@@ -40,6 +40,6 @@
     "name": "momon:GA",
     "fileName": "momon.js",
     "key": "momon_ga",
-    "version": "1.0.0"
+    "version": "1.0.1"
   }
 ]

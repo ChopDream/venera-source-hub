@@ -14,9 +14,9 @@ https://raw.githubusercontent.com/ChopDream/venera-source-hub/main/index.json
 | 禁漫天堂 | 禁漫天堂 | 分流线路、图片线路、启动时刷新域名 |
 | 紳士漫畫 | wn09.shop | 域名选择、自定义域名（默认 wn09.shop）、启动时刷新域名 |
 | 拷贝漫画 | mangacopy.com | API 地址、CDN 线路、图片质量、搜索方式 |
-| MYCOMIC | mycomic.com | 分类页按国家、题材、受众、年份筛选 |
-| nhentai | nhentai.net | 搜索语言、排序等选项 |
-| momon:GA | momon-ga.com | 图片线路（3 号线 / 2 号线）、搜索排序 |
+| MYCOMIC | mycomic.com | 发现页三个分区（最新上架/最近更新/最高人气）各带跳转按钮；分类页可按国家、题材、受众、年份、榜单筛选 |
+| nhentai | nhentai.net | 发现页（热门/最新）、搜索排序、API Key |
+| momon:GA | momon-ga.com | 发现页三个分区（最新/同人誌/商業誌）各带跳转按钮；图片线路、搜索排序 |
 
 ## 使用
 
