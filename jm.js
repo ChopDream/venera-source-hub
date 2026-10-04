@@ -7,7 +7,7 @@ class JM extends ComicSource {
     // unique id of the source
     key = "jm"
 
-    version = "1.4.1"
+    version = "1.4.2"
 
     minAppVersion = "1.5.0"
 
@@ -170,11 +170,11 @@ class JM extends ComicSource {
                 message,
                 [
                     {
-                        text: "Cancel",
+                        text: "取消",
                         callback: () => {}
                     },
                     {
-                        text: "Apply",
+                        text: "应用",
                         callback: () => {
                             this.overwriteApiDomains(domains)
                             this.refreshImgUrl(true)
@@ -1000,18 +1000,18 @@ class JM extends ComicSource {
      */
     settings = {
         refreshDomains: {
-            title: "Refresh Domain List",
+            title: "刷新线路列表",
             type: "callback",
             buttonText: "Refresh",
             callback: () => this.refreshApiDomains(true)
         },
         refreshDomainsOnStart: {
-            title: "Refresh Domain List on Startup",
+            title: "启动时刷新线路列表",
             type: "switch",
             default: true,
         },
         apiDomain: {
-            title: "Api Domain",
+            title: "接口线路",
             type: "select",
             options: [
                 {
@@ -1030,7 +1030,7 @@ class JM extends ComicSource {
             default: "1",
         },
         imageStream: {
-            title: "Image Stream",
+            title: "图片线路",
             type: "select",
             options: [
                 {
@@ -1049,7 +1049,7 @@ class JM extends ComicSource {
             default: "1",
         },
         favoriteOrder: {
-            title: "Favorite Order",
+            title: "收藏排序",
             type: "select",
             options: [
                 {
@@ -1064,14 +1064,14 @@ class JM extends ComicSource {
             default: 'mr'
         },
         dailyCheckInTask: {
-            title: "Daily Check-in Task",
+            title: "每日签到任务",
             type: "switch",
             default: false
         },
         dailyCheckIn: {
-            title: "Manual Check-In",
+            title: "手动签到",
             type: "callback",
-            buttonText: "Check-In",
+            buttonText: "签到",
             callback: () => this.dailyCheckIn()
         },
     }

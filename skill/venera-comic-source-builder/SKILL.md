@@ -71,3 +71,22 @@ Never persist or echo access tokens. A token pasted into chat is compromised; in
 - A scheduled URL check can detect breakage but cannot infer a safe repair; require fresh HTML/JSON evidence.
 - A source may support search while chapter images require login, region access, or a client-only API; preserve partial status instead of claiming full success.
 - If the target site is unavailable or protected, stop at the last verified stage and mark later stages `UNKNOWN`.
+
+## User-experience rules
+
+- Keep the repository page concise: show only the repository address, included sources, useful settings, usage, and short attribution. Do not expose repair logs or internal process notes in the main README.
+- Prefer one discovery page with several named sections over many separate discovery pages. Use Venera `multiPartPage` or `singlePageWithMultiPart` when appropriate. Add `viewMore` jump buttons to full category/ranking pages so users can see a preview without clutter.
+- Make visible labels Chinese and understandable. Preserve the site's required English/native values underneath. For Venera option strings, remember that the parser splits at the first hyphen; values containing hyphens should be exposed through a real `{value, text}` setting or another source-level mapping instead of being silently broken.
+- Put language, country/region, domain, image route, API route, and chapter-order controls in the source's settings when the site supports them; do not hide those choices only inside category pages.
+- Chapter maps must be ordered for forward reading: detect and correct a strictly descending numeric chapter sequence while preserving chapter IDs. Do not reorder mixed volume/extra titles or unnumbered chapters without evidence. Test `next chapter` behavior, not only visual order.
+- Group mirror domains of the same site into one source with a domain/region switch. Keep genuinely different sites as separate sources even when they use the same CMS.
+
+## Account and publishing identity
+
+- This project is maintained in the user's GitHub repository `ChopDream/venera-source-hub` using the user's GitHub account `ChopDream`.
+- All future commits and pushes must use `ChopDream` and the account-linked noreply identity `152665339+ChopDream@users.noreply.github.com`. Never use Milk Code, a generic noreply address, or another contributor identity.
+- Never write, echo, store, or commit the user's GitHub token. Use it only for the explicitly requested remote operation and prefer a local diff/check before pushing.
+
+## Update method
+
+Use Conflux as an internal evidence-based update method when refreshing this Skill or its workflow, but keep this Skill's public name and trigger identity as `venera-comic-source-builder`; do not rename or brand this Skill as Conflux.

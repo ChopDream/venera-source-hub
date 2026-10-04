@@ -7,7 +7,7 @@ class Nhentai extends ComicSource {
     // unique id of the source
     key = "nhentai"
 
-    version = "1.1.1"
+    version = "1.1.2"
 
     minAppVersion = "1.0.0"
 
@@ -513,7 +513,7 @@ class Nhentai extends ComicSource {
                         this.popularCache = popular;
                     }
                     data.push({
-                        title: "Popular Now",
+                        title: "热门漫画",
                         comics: popular.map(e => this.parseComicFromApi(e))
                     });
                 }
@@ -524,7 +524,7 @@ class Nhentai extends ComicSource {
 
                 if (currentPage === 1) {
                         data.push({
-                            title: "New Uploads",
+                            title: "最新上传",
                             comics: latest.comics
                         });
                 } else {

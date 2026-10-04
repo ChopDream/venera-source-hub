@@ -9,14 +9,14 @@
     "name": "禁漫天堂",
     "fileName": "jm.js",
     "key": "jm",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "description": "不能使用時請嘗試切換分流"
   },
   {
     "name": "nhentai",
     "fileName": "nhentai.js",
     "key": "nhentai",
-    "version": "1.1.1"
+    "version": "1.1.2"
   },
   {
     "name": "MYCOMIC",
@@ -28,7 +28,7 @@
     "name": "紳士漫畫",
     "fileName": "wnacg.js",
     "key": "wnacg",
-    "version": "1.0.7"
+    "version": "1.0.9"
   },
   {
     "name": "拷贝漫画",

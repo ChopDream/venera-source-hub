@@ -7,7 +7,7 @@ class Wnacg extends ComicSource {
     // unique id of the source
     key = "wnacg"
 
-    version = "1.0.7"
+    version = "1.0.9"
 
     minAppVersion = "1.0.0"
 
@@ -150,11 +150,11 @@ class Wnacg extends ComicSource {
                 message,
                 [
                     {
-                        text: "Cancel",
+                        text: "取消",
                         callback: () => { }
                     },
                     {
-                        text: "Apply",
+                        text: "应用",
                         callback: () => this.overwriteDomains(domains)
                     }
                 ]
@@ -735,24 +735,24 @@ class Wnacg extends ComicSource {
 
         return {
             refreshDomains: {
-                title: "Refresh Domain List",
+                title: "刷新域名列表",
                 type: "callback",
                 buttonText: "Refresh",
                 callback: () => this.refreshDomains(true)
             },
             refreshDomainsOnStart: {
-                title: "Refresh Domain List on Startup",
+                title: "启动时刷新域名列表",
                 type: "switch",
                 default: true,
             },
             domainSelection: {
-                title: "Domain Selection",
+                title: "域名选择",
                 type: "select",
                 options: domainOptions,
                 default: "0",
             },
             domain0: {
-                title: "Custom Domain",
+                title: "自定义域名",
                 type: "input",
                 validator: String.raw`^(?!:\/\/)(?=.{1,253})([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$`,
                 default: 'wn09.shop',
