@@ -10,6 +10,30 @@
     "fileName": "jm.js",
     "key": "jm",
     "version": "1.4.1",
-    "description": "禁漫天堂漫畫源, 不能使用時請嘗試切換分流"
+    "description": "不能使用時請嘗試切換分流"
+  },
+  {
+    "name": "nhentai",
+    "fileName": "nhentai.js",
+    "key": "nhentai",
+    "version": "1.1.0"
+  },
+  {
+    "name": "MYCOMIC",
+    "fileName": "mycomic.js",
+    "key": "mycomic",
+    "version": "1.1.0"
+  },
+  {
+    "name": "紳士漫畫",
+    "fileName": "wnacg.js",
+    "key": "wnacg",
+    "version": "1.0.6"
+  },
+  {
+    "name": "拷贝漫画",
+    "fileName": "copy_manga.js",
+    "key": "copy_manga",
+    "version": "1.4.2"
   }
 ]

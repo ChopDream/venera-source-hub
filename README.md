@@ -1,64 +1,40 @@
-# Venera Source Hub
+# Venera 漫画源仓库
 
-Venera 漫画源仓库模板，包含 `index.json`、JS 源、取证/生成/检查工具和 GitHub Actions。
-
-添加到 Venera：
-`https://raw.githubusercontent.com/ChopDream/venera-source-hub/main/index.json`
-
-工具：
-`python3 tools/venera_source.py check`
-`python3 tools/venera_source.py check --urls`
-`python3 tools/venera_source.py search https://漫画站.example 漫画关键词`
-`python3 tools/venera_source.py scaffold https://漫画站.example --name 我的漫画站 --key mysite`
-`python3 tools/venera_source.py inspect example.js`
-
-search 会把实际抓到的首页、搜索页和报告保存到 evidence/；scaffold 只生成待验证模板，不猜测解析器。
-
-## 已收录漫画源
-
-| 名称 | key | 文件 | 版本 |
-|---|---|---|---|
-| 包子漫画 | baozi | baozi.js | 1.1.6 |
-| 禁漫天堂 | jm | jm.js | 1.4.0 |
-
-来源：`venera-app/venera-configs`（上游 commit d8a71168，2026-09-07）。此处为镜像收录并同步上游修复；每个源的 `url` 已指向本仓库，便于自更新。
-
-`templates/example.js` 为空模板，不参与 `index.json`，仅作新建源时参考。
-
-## 更新已有源
-
-```bash
-git clone --depth 1 https://github.com/venera-app/venera-configs.git /tmp/upstream
-cp /tmp/upstream/baozi.js ./baozi.js
-python3 tools/check.py
-```
-
-同步上游后需把源文件里的 `url` 改回本仓库地址，并同步 `index.json` 的 `version`。
-
-## 修复记录
-
-### 2026-10-03
-
-| 源 | 版本 | 问题（实测） | 修复 |
-|---|---|---|---|
-| 包子漫画 | 1.1.6 → 1.1.7 | 默认域名 `bzmgcn.com`、`baozimhcn.com` 均 302 跳转到 `www.baozimh.com` 后返回 403，搜索/分类全失败 | 默认域名改为 `webmota.com`，并把可用域名排在前面（`webmota.com` / `kukuc.co` / `twmanga.com` / `dinnerku.com`，实测搜索 200 且 `div.comics-card` 命中 142 处） |
-| 禁漫天堂 | 1.4.0 → 1.4.1 | 内置备用线路 4 个全部失效（`cdnsha.org` / `cdnaspa.cc` / `cdnntr.cc` DNS 解析失败，`cdntwice.org` 返回 404）；若在线线路列表拉取失败则完全不可用 | 备用线路更新为当前在线列表 `www.cdnhjk.net` / `www.cdngwc.cc` / `www.cdngwc.net` / `www.cdngwc.club`（实测搜索接口 200，解密成功，total=710） |
-| 禁漫天堂 | 1.4.1 | `JM.apiDomains` 无初始值，关闭“启动时刷新域名”后 `baseUrl` 为 undefined | 增加 `static apiDomains` 初值，与备用线路一致 |
-
-### CDN 缓存说明
-
-jsDelivr 对 `@main` 分支内容最长缓存 12 小时，因此仓库内置了 `.github/workflows/purge-cdn.yml`，每次 push 自动 purge 变更的 `.js`/`.json`。
-
-实测：`index.json`、`baozi.js` purge 后立即生效；`jm.js` 在 purge 返回 `status: finished` 后仍持续返回旧内容（38352 字节，版本 1.4.0），而 `raw.githubusercontent.com` 已同步为新内容。
-
-因此推荐优先使用 GitHub 原生地址（约 5 分钟缓存）：
+在 Venera 的「仓库地址」中填入：
 
 ```text
 https://raw.githubusercontent.com/ChopDream/venera-source-hub/main/index.json
 ```
 
-jsDelivr 地址作为备用：
+## 收录源
 
-```text
-https://cdn.jsdelivr.net/gh/ChopDream/venera-source-hub@main/index.json
+| 名称 | 站点 | 可在「源设置」中切换 |
+| --- | --- | --- |
+| 包子漫画 | 包子漫画 | 主域名、简繁、图片资源站、图片质量 |
+| 禁漫天堂 | 禁漫天堂 | 分流线路、图片线路、启动时刷新域名 |
+| 紳士漫畫 | wn09.shop | 域名选择、自定义域名（默认 wn09.shop）、启动时刷新域名 |
+| 拷贝漫画 | mangacopy.com | API 地址、CDN 线路、图片质量、搜索方式 |
+| MYCOMIC | mycomic.com | 分类页按国家、题材、受众、年份筛选 |
+| nhentai | nhentai.net | 搜索语言、排序等选项 |
+
+## 使用
+
+1. 复制上面的地址
+2. Venera → 我的 → 漫画源 → 添加仓库 → 粘贴地址
+3. 单个源的可调项：漫画源 → 该源 → 设置
+
+> jsDelivr 镜像（`https://cdn.jsdelivr.net/gh/ChopDream/venera-source-hub@main/index.json`）对分支内容最长缓存 12 小时，更新源时优先用上面的 raw 地址。
+
+## 工具
+
+```bash
+python3 tools/check.py                              # 校验索引与源文件
+python3 tools/search.py <站点URL> <关键词>            # 抓取站点样本到 evidence/
+python3 tools/scaffold.py <站点URL> <名称> <key>      # 生成新源模板
 ```
+
+`check.py` 校验：索引与源文件元数据一致、key 不重复、class 声明符合 Venera 解析规则、JS 语法（`node --check`）。
+
+## 来源
+
+源文件取自 `venera-app/venera-configs`，镜像收录并同步修复。漫画内容与图片版权归各站点及原作者所有，本仓库仅提供客户端解析脚本。
