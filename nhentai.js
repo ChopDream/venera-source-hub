@@ -7,7 +7,7 @@ class Nhentai extends ComicSource {
     // unique id of the source
     key = "nhentai"
 
-    version = "1.1.0"
+    version = "1.1.1"
 
     minAppVersion = "1.0.0"
 
@@ -23,9 +23,21 @@ class Nhentai extends ComicSource {
 
     settings = {
         apiKey: {
-            title: "API Key (Optional)",
+            title: "API Key（选填，登录后自动获取）",
             type: "input",
             default: "",
+        },
+        searchSort: {
+            title: "搜索排序",
+            type: "select",
+            options: [
+                { value: "date", text: "最新上传" },
+                { value: "popular-today", text: "今日热门" },
+                { value: "popular-week", text: "本周热门" },
+                { value: "popular-month", text: "本月热门" },
+                { value: "popular", text: "总人气" },
+            ],
+            default: "date",
         },
     }
 
@@ -703,11 +715,11 @@ class Nhentai extends ComicSource {
             {
                 // For a single option, use `-` to separate the value and text, left for value, right for text
                 options: [
-                    "/-Recent",
-                    "/popular@today-Popular Today",
-                    "/popular@week-Popular Week",
-                    "/popular@month-Popular Month",
-                    "/popular-Popular All",
+                    "/-最新更新",
+                    "/popular@today-今日热门",
+                    "/popular@week-本周热门",
+                    "/popular@month-本月热门",
+                    "/popular-总人气",
                 ],
             }
         ],
@@ -723,7 +735,7 @@ class Nhentai extends ComicSource {
          * @returns {Promise<{comics: Comic[], maxPage: number}>}
          */
         load: async (keyword, options, page) => {
-            let sort = options[0] || "date"
+            let sort = (options && options[0]) || this.loadSetting("searchSort") || "date"
             let url = `${this.apiBaseUrl}/search?query=${encodeURIComponent(keyword)}&page=${page}&sort=${sort}`
             let res = await Network.get(url, this.getApiBaseHeaders());
             if(res.status !== 200) {
@@ -737,14 +749,11 @@ class Nhentai extends ComicSource {
             {
                 // For a single option, use `-` to separate the value and text, left for value, right for text
                 options: [
-                    "date-Recent",
-                    "popular-today-Popular Today",
-                    "popular-week-Popular Week",
-                    "popular-month-Popular Month",
-                    "popular-Popular All",
+                    "date-最新上传",
+                    "popular-总人气",
                 ],
                 // option label
-                label: "sort"
+                label: "排序"
             }
         ],
 

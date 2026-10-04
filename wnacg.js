@@ -7,7 +7,7 @@ class Wnacg extends ComicSource {
     // unique id of the source
     key = "wnacg"
 
-    version = "1.0.6"
+    version = "1.0.7"
 
     minAppVersion = "1.0.0"
 
@@ -427,9 +427,9 @@ class Wnacg extends ComicSource {
         },
         ranking: {
             options: [
-                "day-Day",
-                "week-Week",
-                "month-Month",
+                "day-日榜",
+                "week-周榜",
+                "month-月榜",
             ],
             load: async (option, page) => {
                 let url = `${this.baseUrl}/albums-favorite_ranking-type-${option}.html`
