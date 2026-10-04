@@ -35,5 +35,11 @@
     "fileName": "copy_manga.js",
     "key": "copy_manga",
     "version": "1.4.2"
+  },
+  {
+    "name": "momon:GA",
+    "fileName": "momon.js",
+    "key": "momon_ga",
+    "version": "1.0.0"
   }
 ]

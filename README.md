@@ -16,6 +16,7 @@ https://raw.githubusercontent.com/ChopDream/venera-source-hub/main/index.json
 | 拷贝漫画 | mangacopy.com | API 地址、CDN 线路、图片质量、搜索方式 |
 | MYCOMIC | mycomic.com | 分类页按国家、题材、受众、年份筛选 |
 | nhentai | nhentai.net | 搜索语言、排序等选项 |
+| momon:GA | momon-ga.com | 图片线路（3 号线 / 2 号线）、搜索排序 |
 
 ## 使用
 
