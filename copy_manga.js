@@ -1,10 +1,41 @@
+
+// 只在整列确实按话数倒序时才翻正，正序/无编号的源不受影响
+function normalizeChapterOrder(chapters) {
+    if (!chapters || typeof chapters.get !== "function") return chapters;
+    const values = Array.from(chapters.values());
+    if (values.length === 0) return chapters;
+    if (values[0] && typeof values[0].get === "function") {
+        const out = new Map();
+        chapters.forEach((v, k) => out.set(k, normalizeChapterOrder(v)));
+        return out;
+    }
+    const nums = values.map((t) => {
+        const m = ("" + t).match(/(\d+)/);
+        return m ? parseInt(m[1]) : null;
+    });
+    if (nums.length < 2 || nums.indexOf(null) >= 0) return chapters;
+    let desc = true;
+    for (let i = 1; i < nums.length; i++) {
+        if (nums[i] > nums[i - 1]) {
+            desc = false;
+            break;
+        }
+    }
+    if (!desc) return chapters;
+    const out = new Map();
+    Array.from(chapters.keys())
+        .reverse()
+        .forEach((k) => out.set(k, chapters.get(k)));
+    return out;
+}
+
 class CopyManga extends ComicSource {
 
     name = "拷贝漫画"
 
     key = "copy_manga"
 
-    version = "1.4.2"
+    version = "1.4.3"
 
     minAppVersion = "1.6.0"
 
@@ -729,7 +760,7 @@ class CopyManga extends ComicSource {
             let tags = comicData.theme.map(e => e?.name).filter(name => name !== undefined && name !== null);
             let updateTime = comicData.datetime_updated ? comicData.datetime_updated : "";
             let description = comicData.brief;
-            let chapters = await getChapters(id, data.groups);
+            let chapters = normalizeChapterOrder(await getChapters(id, data.groups));
             let status = comicData.status.display;
 
             return {

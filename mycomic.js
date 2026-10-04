@@ -172,12 +172,43 @@ function buildComicsUrl(page, sort, q, filterType, filterValue) {
     return BASE_URL + "/comics" + (query ? "?" + query : "");
 }
 
+
+// 只在整列确实按话数倒序时才翻正，正序/无编号的源不受影响
+function normalizeChapterOrder(chapters) {
+    if (!chapters || typeof chapters.get !== "function") return chapters;
+    const values = Array.from(chapters.values());
+    if (values.length === 0) return chapters;
+    if (values[0] && typeof values[0].get === "function") {
+        const out = new Map();
+        chapters.forEach((v, k) => out.set(k, normalizeChapterOrder(v)));
+        return out;
+    }
+    const nums = values.map((t) => {
+        const m = ("" + t).match(/(\d+)/);
+        return m ? parseInt(m[1]) : null;
+    });
+    if (nums.length < 2 || nums.indexOf(null) >= 0) return chapters;
+    let desc = true;
+    for (let i = 1; i < nums.length; i++) {
+        if (nums[i] > nums[i - 1]) {
+            desc = false;
+            break;
+        }
+    }
+    if (!desc) return chapters;
+    const out = new Map();
+    Array.from(chapters.keys())
+        .reverse()
+        .forEach((k) => out.set(k, chapters.get(k)));
+    return out;
+}
+
 class MyComic extends ComicSource {
     name = "MYCOMIC";
 
     key = "mycomic";
 
-    version = "1.1.1";
+    version = "1.1.2";
 
     minAppVersion = "1.4.6";
 
@@ -564,7 +595,7 @@ class MyComic extends ComicSource {
 
             // Parse chapter list from Alpine.js x-data
             // The x-data attribute contains: chapters: [{"id":96338,"title":"第16回"}, ...]
-            const chapters = new Map();
+            let chapters = new Map();
             const chapterMatch = /chapters:\s*(\[[\s\S]*?\])/.exec(html);
             if (chapterMatch) {
                 try {
@@ -589,6 +620,8 @@ class MyComic extends ComicSource {
                     });
                 }
             }
+
+            chapters = normalizeChapterOrder(chapters);
 
             return new ComicDetails({
                 title: title,
